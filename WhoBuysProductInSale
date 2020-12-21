@@ -1,0 +1,204 @@
+Problem Statement 
+
+In this problem, you have to modify an existing Java program that reads in some text data, and does some processing on it.
+
+Consider input data (on stdin) in this format:
+Rajan Patil, Aundh, 1, Phone Cover, Rs 170, Cash
+Mohit Gupta, Baner, 1, Samsung Battery, Rs 900, Credit Card
+Rajan Patil, Aundh, 3, Samsung Battery, Rs 1000, Cash
+Nina Kothari, Baner, 4, Earphones, Rs 500, Credit Card
+T Sunitha, Shivajinagar, 5, Earphones, Rs 550, Credit Card
+Rohan Gade, Aundh, 10, Motorola Battery, Rs 1000, Credit Card
+Rajan Patil, Shivajinagar, 21, Earphones, Rs 550, Credit Card
+Rajan Patil, Aundh, 22, USB Cable, Rs 150, UPI
+Meena Kothari, Baner, 23, USB Cable, Rs 100, Cash
+Nina Kothari, Baner, 24, USB Cable, Rs 200, UPI
+Mohit Gupta, Baner, 25, USB Cable, Rs 150, UPI
+The data is the sales of products in different stores of a company in the previous month. Each line consists of 6 comma-separated fields. The first column is customer name, the second column is store location, the third column is date (just day of the month is captured), the fourth column is product name, fifth is price, and sixth is payment type.
+The processData method does nothing - it just returns an empty list. Modify it so that, it processes the input data, finds out which items have sold for a discount (i.e. there was at least one sale of the item at a price lower than the highest price of the item), and then lists the names of customers who have always bought everything at a discount. (i.e. they've never bought something for the maximum price).
+Your program should produce the names of the customers on the standard output, one per line. The output should not contain anything else.
+For the sample input given above, your program should produce the following output:
+Mohit Gupta
+Meena Kothari
+Explanation: Mohit Gupta has bought the Samsung Battery and USB cable, both at a discount, and Meena Kothari has bought the USB Cable at a discount. Everyone else has bought at least one item at maximum price.
+Please read the example carefully to understand exactly what you're expected to do.
+
+Please make sure of the following:
+	•	Please download this Java Program and change it to create your program, and submit your changed program as your answer. If you try to write your own program from scratch, it will take longer, and will probably not work.
+	•	All your changes must be inside processData. Do not make any changes to the rest of the program. Specifically do not add a package declaration, and do not change the name of the class.
+	•	Make sure that processData returns the correct value
+	•	Do not print anything extra to the output. Any unnecessary output will result in program disqualification.
+	•	Copy-paste the entire updated program in the space below. You must submit a full, working, program. Please compile, run, and check the output of your program before submitting it.
+
+
+
+Main.java
+
+import java.util.*;
+import java.io.*;
+
+/* DO NOT CHANGE ANYTHING ABOVE THIS LINE */
+/* You may add any imports here, if you wish, but only from the
+   standard library */
+
+/* Do not add a namespace declaration */
+
+public class Main {
+	public List processData(ArrayList<Customers> lcst , Map<String , Integer> rate) {
+		/*
+		 * Modify this method to process `array` as indicated
+		 * in the question. At the end, return a List containing the
+		 * appropriate values
+		 *
+		 * Please create appropriate classes, and use appropriate
+		 * data structures as necessary.
+		 *
+		 * Do not print anything in this method.
+		 *
+		 * Submit this entire program (not just this method)
+		 * as your answer
+		 */
+		
+		List<String> result = new ArrayList<String>();
+		List<String> high = new ArrayList<String>();
+		for(int i = 0 ; i< lcst.size() ; i++ )
+		{
+		    Customers cobj = lcst.get(i);
+		    String amt = cobj.getAmount();
+		    int intamt = Integer.parseInt(amt);
+		    
+		    if(rate.get(cobj.getItem()) == intamt ) // if high price remove from result
+		    {
+		        high.add(cobj.getName());
+		        if(result.contains(cobj.getName()))
+		        {
+		          
+		            result.remove(cobj.getName());	
+		            
+		        }
+		        
+		    }
+		    else{   // if took in less price add in result
+		        if(result.contains(cobj.getName()))
+		        {
+		            
+		        }
+		        else if (! high.contains(cobj.getName()))
+		        {
+		             
+		        result.add(cobj.getName());}
+		    }
+		    
+		}
+        return result;
+
+	}
+
+	public static void main (String[] args) {
+	    
+		ArrayList<Customers> inputData = new ArrayList<>();
+		String line;
+		HashMap<String , Integer> m = new HashMap<String , Integer>();
+    	BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+    	Main obj = new Main();
+        try {
+			    while((line = br.readLine()) != null)
+			 {
+                String Data[]=line.split(","); 
+				Customers c = new Customers(Data[0] , Data[1] , Data[2] , Data[3] , Data [4] , Data[5]);
+				
+				inputData.add(c);
+				if (line.isEmpty()) {
+				
+					
+			
+					break;
+                }
+                
+                String amountObj = c.getAmount();
+				Integer i = Integer.valueOf(amountObj);   
+				
+				
+				
+				String str= c.getItem() ;
+
+				
+				if(m.containsKey(str) ) // if map is having that item , and if current obj amount is greater then update the map
+				{
+				    if( i > m.get(str) )
+				    {
+					
+					 m.put(str, i);
+				    }
+				    
+				}
+				else{
+					m.put(str , i ) ;
+				}
+			//	System.out.println(m);
+				
+				
+			
+			}// while ends  	
+			
+			
+		}
+		catch(Exception e) {
+		}
+
+		finally {
+		  List<String> ans =  obj.processData(inputData,m);
+		  System.out.println(ans);
+		}
+		
+
+	}
+}
+
+
+Customers.java
+
+public class Customers
+{
+    String name;
+    String place;
+    String dateis;
+    String item;
+    String amount;
+    String mode;
+
+
+
+    public Customers (String Name, String Place,String Dateis,String Item, String Amount,String Mode)
+    {
+
+        this.name =  Name;
+        this.place = Place;
+        this.dateis = Dateis;
+        this.item = Item;
+        this.amount = Amount;
+        this.mode = Mode;
+
+    }
+
+    public void printdata()
+    {
+        System.out.println(name + " " +  place +" " + dateis +" " + item + " " + amount +" " + mode);
+
+    }
+
+    public String getItem()
+    {
+        return this.item ;
+    }
+    public String getName()
+    {
+        return this.name ;
+    }
+
+    public String getAmount()
+    {
+        return  this.amount ;
+    }
+
+}
